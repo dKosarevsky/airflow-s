@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3'
 
 services:
 
@@ -19,7 +19,7 @@ services:
     image: adminer
     container_name: postgresql-adminer
     ports:
-      - "8085:8080"
+      - 8085:8080
     restart: always
     networks:
       - airnet
