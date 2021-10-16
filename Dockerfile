@@ -50,6 +50,7 @@ RUN set -ex \
     && pip install pyOpenSSL \
     && pip install ndg-httpsclient \
     && pip install pyasn1 \
+    && pip install flask_bcrypt \
     && pip install apache-airflow[postgres]==${AIRFLOW_VERSION} \
     && pip install SQLAlchemy==1.3.23 \
     && if [ -n "${PYTHON_DEPS}" ]; then pip install ${PYTHON_DEPS}; fi \
