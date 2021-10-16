@@ -9,6 +9,9 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=airflow
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
     restart: always
@@ -31,14 +34,13 @@ services:
     depends_on:
       - postgres
     environment:
-      - LOAD_EX=n
-      - EXECUTOR=Local
+      - AIRFLOW__WEBSERVER__SECRET_KEY=b27dfe9846d048294adc0df96ad43239fa325db739a0a69a60672e3e6272
     ports:
       - "8001:8080"
     volumes:
       - ./airflow/dags:/usr/local/airflow/dags
       - ./config/airflow.cfg:/usr/local/airflow/airflow.cfg
-      # - ./plugins:/usr/local/airflow/plugins
+      - ./plugins:/usr/local/airflow/plugins
     networks:
       - airnet
 

@@ -74,7 +74,7 @@ RUN chmod +xr /entrypoint.sh && sed -i -e 's/\r$//' entrypoint.sh && chown -R ai
 
 EXPOSE 8080 5555 8793
 
-USER airflow
+#USER admin
 WORKDIR ${AIRFLOW_USER_HOME}
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["webserver"]

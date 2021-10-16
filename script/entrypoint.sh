@@ -6,6 +6,8 @@ TRY_LOOP="20"
 : "${AIRFLOW_HOME:="/usr/local/airflow"}"
 : "${AIRFLOW__CORE__FERNET_KEY:=${FERNET_KEY:=$(python -c "from cryptography.fernet import Fernet; FERNET_KEY = Fernet.generate_key().decode(); print(FERNET_KEY)")}}"
 : "${AIRFLOW__CORE__EXECUTOR:=${EXECUTOR:-Sequential}Executor}"
+: "${ADMIN_USER:="admin"}"
+: "${ADMIN_PWD:="admin"}"
 
 # Load DAGs examples (default: Yes)
 if [[ -z "$AIRFLOW__CORE__LOAD_EXAMPLES" && "${LOAD_EX:=n}" == n ]]; then
@@ -45,8 +47,8 @@ if [ "$AIRFLOW__CORE__EXECUTOR" != "SequentialExecutor" ]; then
     # Default values corresponding to the default compose files
     : "${POSTGRES_HOST:="postgres"}"
     : "${POSTGRES_PORT:="5432"}"
-    : "${POSTGRES_USER:="airflow"}"
-    : "${POSTGRES_PASSWORD:="airflow"}"
+    : "${POSTGRES_USER:="postgres"}"
+    : "${POSTGRES_PASSWORD:="postgres"}"
     : "${POSTGRES_DB:="airflow"}"
     : "${POSTGRES_EXTRAS:-""}"
 
@@ -64,11 +66,16 @@ fi
 
 case "$1" in
   webserver)
-    airflow initdb
+    airflow upgradedb
+    echo "[+] Initialization of Data Base Completed."
+    sleep 10
     if [ "$AIRFLOW__CORE__EXECUTOR" = "LocalExecutor" ] || [ "$AIRFLOW__CORE__EXECUTOR" = "SequentialExecutor" ]; then
       # With the "Local" and "Sequential" executors it should all run in one container.
       airflow scheduler &
     fi
+    airflow create_user -r Admin -u $ADMIN_USER -e admin@example.com -f admin -l user -p $ADMIN_PWD
+    echo "[+] User $ADMIN_USER was given admin power!"
+    sleep 10
     exec airflow webserver
     ;;
   worker|scheduler)
@@ -88,7 +95,4 @@ case "$1" in
     exec "$@"
     ;;
 esac
-
-# Создание Юзера
-airflow create_user -p admin -r Admin -u admin
 
