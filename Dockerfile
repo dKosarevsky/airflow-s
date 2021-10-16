@@ -38,6 +38,8 @@ RUN set -ex \
         default-libmysqlclient-dev \
         apt-utils \
         curl \
+        gnupg \
+        apt-transport-https \
         rsync \
         netcat \
         locales \
