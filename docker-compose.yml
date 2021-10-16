@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 services:
 
@@ -10,34 +10,35 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=airflow
     ports:
-      - 5432:5432
+      - "5432:5432"
     restart: always
     networks:
       - airnet
 
   adminer:
     image: adminer
-    container_name: postgresql-adminer
+    container_name: adminer
     ports:
-      - 8085:8080
+      - "8085:8085"
     restart: always
     networks:
       - airnet
 
   airflow:
     build: .
-    container_name: airflow-1
+    container_name: airflow
     restart: always
     depends_on:
       - postgres
     environment:
-      - AIRFLOW__CORE__FERNET_KEY=HXJmviZ45J6R0bM1DFFij0JJ1ca_JMDWo9Z-Q-wqsFk=
-      - AIRFLOW__WEBSERVER__SECRET_KEY=b27dfe9846d048294adc0df96ad43239fa325db739a0a69a60672e3e6272
+      - LOAD_EX=n
+      - EXECUTOR=Local
     ports:
-      - 8001:8080
+      - "8001:8080"
     volumes:
       - ./airflow/dags:/usr/local/airflow/dags
       - ./config/airflow.cfg:/usr/local/airflow/airflow.cfg
+      # - ./plugins:/usr/local/airflow/plugins
     networks:
       - airnet
 
