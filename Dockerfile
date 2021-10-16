@@ -64,9 +64,7 @@ RUN set -ex \
         /usr/share/doc \
         /usr/share/doc-base
 
-RUN mkdir /project
-
-COPY script/ /project/scripts/
+COPY script/init.sh /init.sh
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
 RUN chown -R airflow: ${AIRFLOW_USER_HOME}
@@ -75,5 +73,5 @@ EXPOSE 8080 5555 8793
 
 USER airflow
 WORKDIR ${AIRFLOW_USER_HOME}
-ENTRYPOINT ["/project/scripts/init.sh"]
+ENTRYPOINT ["/init.sh"]
 CMD ["webserver"]
