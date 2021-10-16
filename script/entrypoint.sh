@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 TRY_LOOP="20"
 
@@ -17,6 +17,7 @@ export \
   AIRFLOW__CORE__EXECUTOR \
   AIRFLOW__CORE__FERNET_KEY \
   AIRFLOW__CORE__LOAD_EXAMPLES \
+  AIRFLOW__CORE__SQL_ALCHEMY_CONN \
 
 # Install custom python package if requirements.txt is present
 if [ -e "/requirements.txt" ]; then

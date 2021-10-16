@@ -64,14 +64,14 @@ RUN set -ex \
         /usr/share/doc \
         /usr/share/doc-base
 
-COPY script/init.sh /init.sh
+COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
-RUN chown -R airflow: ${AIRFLOW_USER_HOME}
+RUN chmod +xr /entrypoint.sh && sed -i -e 's/\r$//' entrypoint.sh && chown -R airflow: ${AIRFLOW_USER_HOME}
 
 EXPOSE 8080 5555 8793
 
 USER airflow
 WORKDIR ${AIRFLOW_USER_HOME}
-ENTRYPOINT ["/init.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["webserver"]
